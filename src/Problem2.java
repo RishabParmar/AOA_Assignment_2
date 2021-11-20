@@ -10,9 +10,10 @@ public class Problem2 {
     float[][] error;
     int totalPoints;
 
-    void calculatePartitions() {
+    void calculateIntervals() {
         float[] dp = new float[points.length];
-        float penalty = 500f;
+        float penalty = 250f;
+        System.out.println("Penalty (delta): " + penalty);
         int[] arr = new int[points.length+1];
         for(int i=1, index = i;i<points.length;i++) {
             dp[i] = Integer.MAX_VALUE;
@@ -31,7 +32,8 @@ public class Problem2 {
             i = arr[i]-1;
         }
         // For printing the final output: Partitions/ Intervals:
-//        for(List<Integer> i : result) System.out.println(i);
+        System.out.println("The intervals found are: ");
+        for(List<Integer> i : result) System.out.println(i);
     }
 
     void computeError() {
@@ -59,6 +61,7 @@ public class Problem2 {
     }
 
     void generateInput(int iterations) {
+        System.out.println("Points: ");
         totalPoints = 0;
         ySquared = new float[iterations+1];
         yMean = new float[iterations+1];
@@ -80,7 +83,7 @@ public class Problem2 {
                 points[i].add(randomizedY);
             }
             yMean[i] /= points[i].size();
-//            System.out.println(i + " : " + points[i]);
+            System.out.println(i + " : " + points[i]);
         }
 //        System.out.println("Total points: " + totalPoints);
 //        System.out.println("Mean Y: " + Arrays.toString(yMean));
@@ -90,16 +93,16 @@ public class Problem2 {
     public static void main(String[] args) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         Problem2 obj = new Problem2();
-        for(int i = 5;i <= 750;i++) {
+        for(int i = 8;i <= 8;i++) {
             obj.generateInput(i);
             long startTime = System.nanoTime();
             obj.computeError();
-            obj.calculatePartitions();
+            obj.calculateIntervals();
             long endTime = System.nanoTime();
             dataset.addValue(endTime - startTime, "", Integer.toString(obj.totalPoints));
         }
         // Plotting the graph:
-        PlotLineGraph plotLineGraph = new PlotLineGraph("Interval Based Constant Best Approximation");
-        plotLineGraph.plot(dataset, "Interval Based Constant Best Approximation graph" , "Number of Points (Input size)", "Execution Time(in ns)");
+//        PlotLineGraph plotLineGraph = new PlotLineGraph("Interval Based Constant Best Approximation");
+//        plotLineGraph.plot(dataset, "Interval Based Constant Best Approximation graph" , "Number of Points (Input size)", "Execution Time(in ns)");
     }
 }

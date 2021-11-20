@@ -8,7 +8,7 @@ public class WCommonSubstring {
 
     HashMap<Character, Integer> weights = new HashMap<>();
     int[][] wMatrix;
-    int penalty = -1;
+    int penalty = -13;
     int maxValue = Integer.MIN_VALUE;
     int[] maxIndices;
 
@@ -81,8 +81,8 @@ public class WCommonSubstring {
         for(int i=1;i<=26;i++) {
             weights.put((char)(i+64), i);
         }
-        System.out.println("Weights: " + weights);
-        System.out.println("Penalty: " + penalty);
+//        System.out.println("Weights: " + weights);
+//        System.out.println("Penalty: " + penalty);
     }
 
     void initializeVariables() {
@@ -91,11 +91,12 @@ public class WCommonSubstring {
         maxValue = Integer.MIN_VALUE;
     }
 
+    // 40 to 5000, penalty = -1 and -13
     public static void main(String[] args) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         WCommonSubstring wCommonSubstring = new WCommonSubstring();
         wCommonSubstring.setWeights();
-        for(int i=40;i<=50;i++) {
+        for(int i=40;i<=5000;i++) {
             wCommonSubstring.initializeVariables();
             String[] inputStrings = wCommonSubstring.generateRandomStrings(i);
             String str1 = inputStrings[0];
@@ -103,10 +104,14 @@ public class WCommonSubstring {
             long startTime = System.nanoTime();
 //            String str1 = "ABCBCAACCB";
 //            String str2 = "ABCAABCAA";
-            System.out.println("Input Strings: " + str1 + " , " + str2);
-            wCommonSubstring.computeWACSubStringMatrixValues(str1, str2);
-            System.out.println("Weighted Approximate Common Substring: " + wCommonSubstring.getBestString(str1, str2));
-//            wCommonSubstring.getBestString(str1, str2);
+//            System.out.println("Input Strings: " + str1 + " , " + str2);
+            if(str1.length() != 0 || str2.length() != 0) {
+                wCommonSubstring.computeWACSubStringMatrixValues(str1, str2);
+//            System.out.println("Weighted Approximate Common Substring: " + wCommonSubstring.getBestString(str1, str2));
+                wCommonSubstring.getBestString(str1, str2);
+            } else {
+
+            }
             long endTime = System.nanoTime();
             dataset.addValue(endTime - startTime, "", Integer.toString(str1.length() * str2.length()));
         }
@@ -115,8 +120,3 @@ public class WCommonSubstring {
         plotLineGraph.plot(dataset, "Weighted Approx. Common Substring graph" , "Input size(string 1 size * string 2 size)", "Execution Time(in ns)");
     }
 }
-
-
-
-//    String str1 = "XZMAZYS";  XZMAZ for penalty = -1
-//    String str2 = "XAMAZS"; MAZ for penalty = -13
